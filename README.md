@@ -147,6 +147,82 @@ The API will be available at `http://localhost:8000`
 php artisan serve --host=127.0.0.1 --port=8000
 ```
 
+## Running the Queue Worker
+
+The application uses background jobs to send welcome emails when employees are created. You need to run a queue worker to process these jobs.
+
+### Development
+
+For development, you can run the queue worker in a separate terminal:
+
+```bash
+php artisan queue:work
+```
+
+This will process jobs continuously until you stop it (Ctrl+C).
+
+**Process a single job:**
+```bash
+php artisan queue:work --once
+```
+
+**Process jobs with specific options:**
+```bash
+php artisan queue:work --tries=3 --timeout=60
+```
+
+### Production
+
+For production environments, you should use a process manager like Supervisor to keep the queue worker running. Alternatively, you can use Laravel Horizon if you're using Redis.
+
+**Example Supervisor configuration** (`/etc/supervisor/conf.d/laravel-worker.conf`):
+```ini
+[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /path/to/legacy-hr-api/artisan queue:work database --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/path/to/legacy-hr-api/storage/logs/worker.log
+stopwaitsecs=3600
+```
+
+After creating the configuration, reload Supervisor:
+```bash
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start laravel-worker:*
+```
+
+### Queue Configuration
+
+The application is configured to use the `database` queue driver by default. Jobs are stored in the `jobs` table, which is created automatically when you run migrations.
+
+To check if jobs are queued:
+```bash
+php artisan queue:monitor
+```
+
+To view failed jobs:
+```bash
+php artisan queue:failed
+```
+
+To retry failed jobs:
+```bash
+php artisan queue:retry all
+```
+
+### Background Job Behavior
+
+When an employee is created via the API, a `SendWelcomeEmail` job is automatically dispatched to the queue. The job logs a message: `"Welcome email sent to {email}"` which can be found in `storage/logs/laravel.log`.
+
+**Important:** The queue worker must be running for background jobs to be processed. If the worker is not running, jobs will remain in the queue until a worker processes them.
+
 ## API Endpoints
 
 ### Create Employee
