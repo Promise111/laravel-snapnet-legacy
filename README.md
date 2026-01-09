@@ -2,6 +2,8 @@
 
 A Laravel-based HR/Payroll API for managing employees. This is a legacy application that is part of a gradual transition to Node.js, with new services being built in Node.js while maintaining and improving this Laravel codebase.
 
+**Repository:** [https://github.com/Promise111/laravel-snapnet-legacy](https://github.com/Promise111/laravel-snapnet-legacy) (main branch)
+
 ## Project Overview
 
 This API provides endpoints for managing employee data in an HR/Payroll system. The application follows Laravel best practices with clean MVC architecture, proper validation, and production-ready error handling.
