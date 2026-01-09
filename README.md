@@ -11,14 +11,14 @@ This API provides endpoints for managing employee data in an HR/Payroll system. 
 - Employee management via RESTful API
 - Comprehensive input validation
 - Support for both JSON and form data requests
-- SQLite database (can be configured for MySQL)
+- MySQL database
 - Clean, maintainable code structure
 
 ## Requirements
 
 - PHP >= 8.2
 - Composer
-- SQLite (default) or MySQL
+- MySQL
 - Node.js and npm (for frontend assets)
 
 ## Installation
@@ -86,8 +86,12 @@ LOG_STACK=single
 LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=debug
 
-DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=legacy_hr_api
+DB_USERNAME=root
+DB_PASSWORD=
 
 SESSION_DRIVER=database
 SESSION_LIFETIME=120
@@ -119,14 +123,10 @@ MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-**Note:** For MySQL, update the database configuration:
+**Note:** For SQLite (development/testing only), update the database configuration:
 ```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=legacy_hr_api
-DB_USERNAME=root
-DB_PASSWORD=
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
 ```
 
 ## Starting the Server
@@ -305,14 +305,6 @@ curl -X POST http://localhost:8000/api/employees \
 
 ## Database Setup
 
-### SQLite (Default)
-
-The application uses SQLite by default. The database file will be created automatically at `database/database.sqlite` when you run migrations.
-
-```bash
-php artisan migrate
-```
-
 ### MySQL
 
 1. Create a MySQL database:
@@ -326,6 +318,21 @@ php artisan migrate
    ```bash
    php artisan migrate
    ```
+
+### SQLite (Development/Testing Only)
+
+For local development or testing, you can use SQLite. The database file will be created automatically at `database/database.sqlite` when you run migrations.
+
+Update your `.env` file:
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+```
+
+Then run migrations:
+```bash
+php artisan migrate
+```
 
 ## Project Structure
 
@@ -352,7 +359,7 @@ legacy-hr-api/
 
 ## Key Assumptions
 
-1. **Database:** SQLite is used by default for simplicity. Can be easily switched to MySQL.
+1. **Database:** MySQL is the intended database for production use. SQLite can be used for local development/testing.
 2. **Validation:** All employee fields are required and validated according to business rules.
 3. **Email Uniqueness:** Email addresses must be unique across all employees.
 4. **Salary Format:** Salary is stored as a decimal with 2 decimal places.
