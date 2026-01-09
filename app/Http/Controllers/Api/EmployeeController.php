@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PersistEmployeeRequest;
+use App\Jobs\SendWelcomeEmail;
 use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -19,6 +21,10 @@ class EmployeeController extends Controller
     {
         try {
             $employee = Employee::create($request->validated());
+
+            // Dispatch background job to send welcome email
+            SendWelcomeEmail::dispatch($employee->email);
+            // Log::info("Dispatching welcome email", ['email' => $employee->email]);
 
             return response()->json([
                 'success' => true,
