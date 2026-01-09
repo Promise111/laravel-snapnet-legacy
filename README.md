@@ -1,59 +1,295 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Legacy HR API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based HR/Payroll API for managing employees. This is a legacy application that is part of a gradual transition to Node.js, with new services being built in Node.js while maintaining and improving this Laravel codebase.
 
-## About Laravel
+## Project Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This API provides endpoints for managing employee data in an HR/Payroll system. The application follows Laravel best practices with clean MVC architecture, proper validation, and production-ready error handling.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Employee management via RESTful API
+- Comprehensive input validation
+- Support for both JSON and form data requests
+- SQLite database (can be configured for MySQL)
+- Clean, maintainable code structure
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP >= 8.2
+- Composer
+- SQLite (default) or MySQL
+- Node.js and npm (for frontend assets)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
 
-## Laravel Sponsors
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd legacy-hr-api
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-### Premium Partners
+3. **Install Node.js dependencies**
+   ```bash
+   npm install
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Set up environment file**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Or create a `.env` file with the sample configuration below.
 
-## Contributing
+5. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Run database migrations**
+   ```bash
+   php artisan migrate
+   ```
 
-## Code of Conduct
+7. **Build frontend assets (optional)**
+   ```bash
+   npm run build
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Environment Configuration
 
-## Security Vulnerabilities
+Create a `.env` file in the root directory with the following sample configuration:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```env
+APP_NAME="Legacy HR API"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_TIMEZONE=UTC
+APP_URL=http://localhost:8000
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+
+APP_MAINTENANCE_DRIVER=file
+APP_MAINTENANCE_STORE=database
+
+BCRYPT_ROUNDS=12
+
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
+
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+
+CACHE_STORE=database
+CACHE_PREFIX=
+
+MEMCACHED_HOST=127.0.0.1
+
+REDIS_CLIENT=phpredis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_MAILER=log
+MAIL_HOST=127.0.0.1
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+**Note:** For MySQL, update the database configuration:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=legacy_hr_api
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+## Starting the Server
+
+### Development Server
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+The API will be available at `http://localhost:8000`
+
+### Custom Host/Port
+
+```bash
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+## API Endpoints
+
+### Create Employee
+
+Create a new employee in the system.
+
+**Endpoint:** `POST /api/employees`
+
+**Content-Type:** `application/json` or `application/x-www-form-urlencoded`
+
+**Request Body:**
+```json
+{
+    "first_name": "Promise",
+    "last_name": "Ihunna",
+    "email": "promiseihunna@gmail.com",
+    "salary": "500000.00",
+    "department": "Software Engineering"
+}
+```
+
+**Field Requirements:**
+- `first_name` (required, string, max:255)
+- `last_name` (required, string, max:255)
+- `email` (required, valid email, unique, max:255)
+- `salary` (required, numeric, min:0)
+- `department` (required, string, max:255)
+
+**Success Response (201 Created):**
+```json
+{
+    "success": true,
+    "message": "Employee created successfully",
+    "data": {
+        "id": 1,
+        "first_name": "Promise",
+        "last_name": "Ihunna",
+        "email": "promiseihunna@gmail.com",
+        "salary": "500000.00",
+        "department": "Software Engineering",
+        "created_at": "2026-01-09T12:00:00.000000Z",
+        "updated_at": "2026-01-09T12:00:00.000000Z"
+    }
+}
+```
+
+**Validation Error Response (422 Unprocessable Entity):**
+```json
+{
+    "success": false,
+    "message": "Validation failed",
+    "errors": {
+        "email": ["The email has already been taken."],
+        "salary": ["The salary field is required."]
+    }
+}
+```
+
+**Example cURL Request:**
+```bash
+curl -X POST http://localhost:8000/api/employees \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "first_name": "Promise",
+    "last_name": "Ihunna",
+    "email": "promiseihunna@gmail.com",
+    "salary": "500000.00",
+    "department": "Software Engineering"
+  }'
+```
+
+**Example Form Data Request:**
+```bash
+curl -X POST http://localhost:8000/api/employees \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -H "Accept: application/json" \
+  -d "first_name=Promise&last_name=Ihunna&email=promiseihunna@gmail.com&salary=500000.00&department=Software Engineering"
+```
+
+## Database Setup
+
+### SQLite (Default)
+
+The application uses SQLite by default. The database file will be created automatically at `database/database.sqlite` when you run migrations.
+
+```bash
+php artisan migrate
+```
+
+### MySQL
+
+1. Create a MySQL database:
+   ```sql
+   CREATE DATABASE legacy_hr_api;
+   ```
+
+2. Update `.env` with MySQL credentials (see Environment Configuration above)
+
+3. Run migrations:
+   ```bash
+   php artisan migrate
+   ```
+
+## Project Structure
+
+```
+legacy-hr-api/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   └── Api/
+│   │   │       └── EmployeeController.php
+│   │   └── Requests/
+│   │       └── PersistEmployeeRequest.php
+│   └── Models/
+│       └── Employee.php
+├── database/
+│   ├── migrations/
+│   │   └── 2026_01_09_101723_create_employees_table.php
+│   └── database.sqlite
+├── routes/
+│   └── api.php
+├── config/
+└── .env
+```
+
+## Key Assumptions
+
+1. **Database:** SQLite is used by default for simplicity. Can be easily switched to MySQL.
+2. **Validation:** All employee fields are required and validated according to business rules.
+3. **Email Uniqueness:** Email addresses must be unique across all employees.
+4. **Salary Format:** Salary is stored as a decimal with 2 decimal places.
+5. **API Format:** All responses follow a consistent JSON structure with `success`, `message`, and `data`/`errors` fields.
+
+## Testing
+
+Run the test suite:
+
+```bash
+php artisan test
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is part of a legacy system and is maintained for production use.
